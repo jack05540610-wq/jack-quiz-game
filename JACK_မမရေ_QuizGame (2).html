@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="my">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>JACK — မမရေ 💗</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;font-family:"Noto Sans Myanmar","Myanmar Text",sans-serif;background:#050814;color:#fff;overflow:hidden}
+body{display:flex;align-items:center;justify-content:center}
+#app{width:min(100vw,576px);height:min(100vh,760px);position:relative;overflow:hidden;background:radial-gradient(circle at 50% 20%,#18264b,#050814 65%)}
+.screen{position:absolute;inset:0;display:none;align-items:center;justify-content:center;padding:24px}
+.screen.active{display:flex}
+.card{width:92%;max-width:500px;border:1px solid #354064;background:rgba(13,18,37,.78);backdrop-filter:blur(12px);border-radius:28px;padding:28px 22px;box-shadow:0 0 40px rgba(45,110,255,.14)}
+h1,h2{margin:0 0 12px;text-align:center}h1{font-size:30px}h2{font-size:23px}
+.sub{text-align:center;color:#c7cbe0;line-height:1.8}
+button{width:100%;border:1px solid #4b587e;border-radius:22px;background:rgba(255,255,255,.07);color:#fff;padding:15px 12px;margin-top:12px;font-size:17px;font-family:inherit;cursor:pointer}
+button:hover{background:rgba(255,255,255,.13)}
+.primary{background:linear-gradient(90deg,#10d86b,#20a7ff);border:0;box-shadow:0 0 22px rgba(25,211,140,.3);font-weight:700}
+.icon{font-size:68px;text-align:center;margin-bottom:10px}
+.top{position:absolute;top:18px;left:5%;right:5%;z-index:3}
+.mission{border:1px solid #2c9d75;border-radius:22px;background:#080c19dd;padding:8px;text-align:center;font-weight:800}
+.bar{height:6px;background:#17263a;border-radius:10px;margin-top:7px;overflow:hidden}.fill{height:100%;width:0;background:linear-gradient(90deg,#11df75,#2aa7ff);transition:.35s}
+.combo{text-align:center;font-size:28px;font-weight:900;color:#ffe500;text-shadow:0 0 12px #ffb000;margin-top:8px}
+.qbox{margin-top:105px}
+.option.correct{background:linear-gradient(90deg,#0aa85c,#19c777);border-color:#4dffad}
+.option.wrong{background:#6b1e35;border-color:#ff638c}
+#game{align-items:flex-start}.qbox .card{padding-top:22px}
+.final{background-size:cover;background-position:center}.final:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.25),rgba(0,0,0,.82))}
+.final .card{position:relative;background:rgba(7,10,18,.72);max-height:88%;overflow:auto}
+.letter{font-size:16px;line-height:2;text-align:left;color:#fff}
+.small{font-size:13px;color:#b8bfd7;text-align:center;margin-top:12px}
+.heart{position:absolute;animation:float 3.5s linear forwards;font-size:22px;pointer-events:none}
+@keyframes float{0%{transform:translateY(20px) scale(.7);opacity:0}15%{opacity:1}100%{transform:translateY(-250px) scale(1.2);opacity:0}}
+</style>
+</head>
+<body>
+<div id="app">
+<section id="start" class="screen active">
+  <div class="card">
+    <div class="icon">🥺💗</div>
+    <h1>မမရေ...</h1>
+    <p class="sub">မမအတွက် JACK က ဖန်တီးထားတဲ့<br>အမေးအဖြေ Game လေးတစ်ခုပါ။<br>အဖြေမှန်တိုင်း <b>COMBO</b> တက်မယ် 🔥</p>
+    <button class="primary" onclick="startGame()">စကြမယ် 💗</button>
+  </div>
+</section>
+
+<section id="game" class="screen">
+  <div class="top">
+    <div class="mission">Mission: <span id="count">0</span> / 5</div>
+    <div class="bar"><div class="fill" id="fill"></div></div>
+    <div class="combo" id="combo">COMBO x0 🔥</div>
+  </div>
+  <div class="qbox card">
+    <h2 id="question">မေးခွန်း</h2>
+    <div id="answers"></div>
+  </div>
+</section>
+
+<section id="final" class="screen final">
+  <div class="card">
+    <div class="icon">💗</div>
+    <h1>MISSION COMPLETE!</h1>
+    <div class="combo">COMBO x5 🔥</div>
+    <p class="letter">
+      မမရေ အကြောင်းတစ်ခုခုကြောင့်သာမပြောခဲ့တာပါ။<br>
+      ကျွန်တော်ချစ်တဲ့ အချစ်က အပေါ်ယံတစ်စပ်လေးမှ မပါတာ တကယ်ပါ။<br>
+      မမကိုစတွေ့တဲ့နေ့ထဲက ပြောချင်တဲ့စကားက “ချစ်တယ်”။<br>
+      ကျွန်တော် ဘယ်ကြောင့်ချစ်မိတာလဲ၊ ဘာလို့ဒီလောက်ထိ ကျွန်တော့်စိတ်ကို စိုးမိုးလွန်းတာလဲလို့ မေးချင်ခဲ့တာ။<br>
+      ဖြစ်နိုင်ရင် ပြန်ချစ်ပေးပါ။<br>
+      ကျွန်တော်ဟာ မမကို ဘယ်လိုအချိန်ပဲဖြစ်နေပါစေ၊ ဘယ်လိုအတားအဆီးတွေပဲရှိနေပါစေ လက်လွတ်ဖို့စိတ်ကူးမရှိတာ သေချာနေပြီ။<br>
+      မို့ ကျွန်တော်ကို ပြန်ချစ်ပေးပါ။ ❤️
+    </p>
+    <button class="primary" onclick="location.reload()">နောက်တစ်ခါ ပြန်ဆော့မယ် 🔁</button>
+    <div class="small">JACK • For someone special 💗</div>
+  </div>
+</section>
+</div>
+
+<script>
+const qs=[
+ ["မမကို စတွေ့တဲ့နေ့က JACK ပြောချင်ခဲ့တဲ့စကားက ဘာလဲ?",["မင်္ဂလာပါ","ချစ်တယ်","နေကောင်းလား"],1],
+ ["JACK ရဲ့အချစ်က ဘယ်လိုအချစ်လဲ?",["အပေါ်ယံအချစ်","ခဏတာအချစ်","အပေါ်ယံတစ်စပ်လေးမှမပါတဲ့အချစ်"],2],
+ ["JACK က ဘာကို လက်လွတ်ဖို့စိတ်ကူးမရှိတာလဲ?",["ဂိမ်း","မမကို","ဖုန်း"],1],
+ ["အတားအဆီးတွေရှိလာရင် JACK ရဲ့ဆုံးဖြတ်ချက်က?",["လက်လွှတ်မယ်","မသိတော့ဘူး","လက်လွှတ်ဖို့စိတ်ကူးမရှိဘူး"],2],
+ ["နောက်ဆုံး JACK က ဘာကိုတောင်းဆိုထားလဲ?",["ပြန်ချစ်ပေးပါ","ဂိမ်းဆော့ပေးပါ","မုန့်ဝယ်ပေးပါ"],0]
+];
+let i=0,combo=0;
+function show(id){document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));document.getElementById(id).classList.add("active")}
+function startGame(){i=0;combo=0;show("game");render()}
+function render(){
+ document.getElementById("count").textContent=i;
+ document.getElementById("fill").style.width=(i/5*100)+"%";
+ document.getElementById("combo").textContent="COMBO x"+combo+" 🔥";
+ const [q,a,c]=qs[i]; document.getElementById("question").textContent=q;
+ const box=document.getElementById("answers");box.innerHTML="";
+ a.forEach((t,n)=>{let b=document.createElement("button");b.className="option";b.textContent=t;b.onclick=()=>answer(n,c,b);box.appendChild(b)})
+}
+function answer(n,c,b){
+ document.querySelectorAll(".option").forEach(x=>x.disabled=true);
+ if(n===c){b.classList.add("correct");combo++;burst()}
+ else{b.classList.add("wrong");combo=0;document.querySelectorAll(".option")[c].classList.add("correct")}
+ i++;
+ setTimeout(()=>{if(i>=5){show("final");}else render()},650);
+}
+function burst(){
+ for(let k=0;k<8;k++){let s=document.createElement("span");s.className="heart";s.textContent=["💗","💕","✨","❤️"][k%4];s.style.left=(20+Math.random()*60)+"%";s.style.bottom="30%";s.style.animationDelay=(Math.random()*.2)+"s";document.getElementById("app").appendChild(s);setTimeout(()=>s.remove(),3600)}
+}
+</script>
+</body>
+</html>
